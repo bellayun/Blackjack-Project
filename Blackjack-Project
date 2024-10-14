@@ -1,0 +1,116 @@
+# 1. ask user to intput Y/N to playing game
+# 2. draw two numbers from the card for the user (2-10, J/Q/K=10, A=1 or 11)
+# 3. draw one number for the computer
+# 4. ask user if they want to draw another card Y/N
+# 5. if yes, show one more number for the user, and then show computer's number
+# 5-1. if the user's sum exceed 21, user loses
+# 6. if no, show computer's number
+# 6-1. if the computer's sum is less than 16, draw again
+# 7. whomever's sum is closer to 21 wins. (compare abs of difference)
+
+# do you want to play Blackjack? Y or N
+# your cards: [a,b], current score: a+b
+# computer's first card: i
+# type Y to get another card, type N to pass:
+# your final hand: [a,b,c], final score: a+b+c
+# computer's final hand: [i,j,k], final score: i+j+k
+# win, lose, draw
+# do you want to play a Blackjack? Y or N
+
+# import
+import random
+
+# functions
+
+
+# cards
+user_cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace']
+computer_cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace']
+
+
+playBlackjack = input("Do you want to play Blackjack? Enter 'Y' or 'N': ").lower()
+if playBlackjack=='y':
+
+    # randomly select two cards from 'user_cards', and 'computer_cards'
+    user_initial_cards = random.sample(user_cards,2)
+    computer_initial_cards = random.sample(computer_cards,2)
+    
+
+    # remove selected items from card list
+    for item in user_initial_cards:
+        if item in user_cards:
+            user_cards.remove(item)
+    
+    for item in computer_initial_cards:
+        if item in computer_cards:
+            computer_cards.remove(item)
+    
+    # convert Jack, Queen, and King to int 10
+    calculatable_user_cards = [10 if item=='Jack' or item=='Queen' or item=='King' else item for item in user_initial_cards]
+    calculatable_computer_cards = [10 if item=='Jack' or item=='Queen' or item=='King' else item for item in computer_initial_cards]
+    #print(calculatable_user_cards)
+    
+    if item=='Ace' in calculatable_user_cards:
+        print(f"Your cards: {user_initial_cards}")
+        print(f"Computer's first card: {computer_initial_cards[0]}")
+    else:
+    # calculate the score
+        user_sum = sum(calculatable_user_cards)
+        computer_sum = sum(calculatable_computer_cards)
+
+        # print user's two cards with score, and computer's first card
+        print(f"Your cards: {user_initial_cards}, score: {user_sum}")
+        print(f"Computer's first card: {computer_initial_cards[0]}")
+
+   
+    ### Getting second round
+    # ask the user if they want to get another card
+    another_card = input("Do you want to get another card? Y or N: ").lower()
+    if another_card == 'y':
+        user_second_round = random.sample(user_cards, 1)
+        computer_second_round = random.sample(computer_cards,1)
+
+        for item in user_second_round:
+            if item in user_cards:
+                user_cards.remove(item)
+    
+        for item in computer_second_round:
+            if item in computer_cards:
+                computer_cards.remove(item)
+    
+    # create a new list for all three cards
+    user_new_list = user_initial_cards.extend(user_second_round)
+    dealer_new_list = computer_initial_cards.extend(computer_second_round)
+
+    # convert selected Jack, Queen, and King to int 10
+    calculatable_user_cards2 = [10 if item=='Jack' or item=='Queen' or item=='King' else item for item in user_new_list]
+    calculatable_computer_cards2 = [10 if item=='Jack' or item=='Queen' or item=='King' else item for item in dealer_new_list]
+
+    # if there's no 'Ace' in the list, add all the items in the list
+    if item!='Ace' in calculatable_user_cards2:
+        user_sum = user_sum+ sum(calculatable_user_cards2)
+    else:
+        print(f"Here are your final cards: {calculatable_user_cards2}")
+    if item!='Ace' in calculatable_computer_cards2:
+        computer_sum = computer_sum+sum(calculatable_computer_cards2)
+    else:
+        print(f"Here are computer's final cards: {calculatable_computer_cards2}")
+   
+    # check if the user sum exceeds 21 and conclude who won
+    if user_sum > 21:
+        print("Your score exceed 21, you lost")
+    elif user_sum < 21 and computer_sum < 21:
+        user_difference = 21 - user_sum
+        comp_difference = 21 - computer_sum
+        if user_difference < comp_difference:
+            print("You won")
+    elif computer_sum > 21:
+        print("Computer's score exceed 21, you won")
+
+    # print user's two cards with score, and computer's first card
+    #print(f"Your cards: {user_initial_cards}, {user_second_round}, score: {user_sum}")
+    #print(f"Computer's cards: {computer_initial_cards}, {computer_second_round}, score: {computer_sum}")
+
+
+else:
+    print("Thank you for your precious time!")
